@@ -1625,7 +1625,7 @@ jobs:
 
 ### ขั้นตอนที่ 9.1: Commit และ Push Code
 
-```bash
+``` bash
 # เพิ่มไฟล์ทั้งหมด
 git add .
 
