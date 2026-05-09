@@ -969,7 +969,82 @@ start newman-report.html       # Windows (Git Bash)
 **คำถาม 4.3**: Newman tests ที่เขียนมีการทดสอบทั้ง positive cases (สำเร็จ) และ negative cases (ล้มเหลว) อธิบายให้ครบอย่างน้อย 2 ตัวอย่าง
 
 ```plaintext
-# ตอบคำถามที่นี่
+# Positive vs Negative Test Cases
+Positive Cases — ทดสอบเมื่อทำถูกต้อง
+// ส่งข้อมูลครบถ้วนถูกต้อง
+POST /api/bookings
+{
+  "fullname": "สมชาย ใจดี",
+  "email": "somchai@test.com",
+  "phone": "0812345678",
+  "checkin": "2026-06-01",
+  "checkout": "2026-06-03",
+  "roomId": 1,
+  "guests": 2
+}
+
+// คาดหวัง
+pm.test("Status 201 Created", () => {
+  pm.response.to.have.status(201);
+});
+pm.test("มี id กลับมา", () => {
+  pm.expect(pm.response.json()).to.have.property("id");
+});
+
+2. ดึงรายการห้องพักสำเร็จ
+GET /api/rooms
+
+// คาดหวัง
+pm.test("Status 200 OK", () => {
+  pm.response.to.have.status(200);
+});
+pm.test("ได้ข้อมูลเป็น Array", () => {
+  pm.expect(pm.response.json()).to.be.an("array");
+});
+pm.test("มีข้อมูลห้องพักอย่างน้อย 1 ห้อง", () => {
+  pm.expect(pm.response.json().length).to.be.above(0);
+});
+
+---
+
+Negative Cases — ทดสอบเมื่อทำผิด
+1. จองห้องพักโดยไม่มีข้อมูลครบ
+// ส่งข้อมูลไม่ครบ — ขาด email และ phone
+POST /api/bookings
+{
+  "fullname": "สมชาย ใจดี",
+  "checkin": "2026-06-01",
+  "checkout": "2026-06-03"
+}
+
+// คาดหวัง
+pm.test("Status 400 Bad Request", () => {
+  pm.response.to.have.status(400);
+});
+pm.test("มี error message กลับมา", () => {
+  pm.expect(pm.response.json()).to.have.property("error");
+});
+
+2.Login ด้วยรหัสผ่านผิด
+POST /api/login
+{
+  "username": "admin",
+  "password": "wrongpassword"
+}
+
+// คาดหวัง
+pm.test("Status 401 Unauthorized", () => {
+  pm.response.to.have.status(401);
+});
+pm.test("error บอกว่า credentials ผิด", () => {
+  pm.expect(pm.response.json().error)
+    .to.include("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+});
+
+Positive Test = ทดสอบว่า "ทำถูกแล้วได้ผลลัพธ์ที่ถูก"
+Negative Test = ทดสอบว่า "ทำผิดแล้วระบบจัดการได้อย่างเหมาะสม"
+
+ขาดอันใดอันหนึ่ง = test ไม่ครอบคลุมพอครับ
 
 ```
 
