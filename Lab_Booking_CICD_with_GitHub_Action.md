@@ -1604,7 +1604,7 @@ jobs:
 | `RAILWAY_PROJECT_ID` | `abc123-...` | Railway → Project → Settings → Project ID |
 | `RAILWAY_BACKEND_URL` | `https://xxx.up.railway.app` | Railway → Service → Settings → Networking |
 
-**ตรวจสอบว่า Secrets ครบถ้วน**:
+***ตรวจสอบว่า Secrets ครบถ้วน***:
 
 ```
 ✅ VERCEL_TOKEN
